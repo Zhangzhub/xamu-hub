@@ -1,63 +1,469 @@
-Top.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Top.BackgroundTransparency = 1
-Top.Position = UDim2.new(0, 45, 0, 0)
-Top.Size = UDim2.new(0, 580, 0, 70)
-Top.ZIndex = 2
+-- Nome do script: Nono Hub
 
-	local Logo = Instance.new("ImageLabel")
-	Logo.Name = "Logo"
-	Logo.Parent = Top
-	Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Logo.BackgroundTransparency = 1.000
-	Logo.Position = UDim2.new(0, 10, 0, 30)
-	Logo.Size = UDim2.new(0, 60, 0, 60)
-	Logo.Image = "rbxassetid://14495684069"
-	Logo.Active = true
-	Logo.ZIndex = 8
-	
-	game:GetService("TweenService"):Create(Logo, TweenInfo.new(5, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut, -1, true, 0), { Rotation = 360 }):Play()
-	
-	local Name = Instance.new("TextLabel")
-	Name.Name = "Name"
-	Name.Parent = Main
-	Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Name.BackgroundTransparency = 1.000
-	Name.Position = UDim2.new(0.107756112, 0, 0, 0)
-	Name.Size = UDim2.new(0, 50, 0, 27)
-	Name.Font = Enum.Font.GothamSemibold
-	Name.Text = "Sea Hub"
-	Name.TextColor3 = Color3.fromRGB(35, 21, 233)
-	Name.TextSize = 17.000
+-- Função para criar a interface
+local function createInterface()
+    local ScreenGui = Instance.new("ScreenGui")
+    local MainFrame = Instance.new("Frame")
+    local OpenCloseButton = Instance.new("TextButton")
+    local MainTab = Instance.new("Frame")
+    local MainButton = Instance.new("TextButton")
+    local AutoFastAttackButton = Instance.new("TextButton")
+    local AutoCDKButton = Instance.new("TextButton")
 
-	local Hub = Instance.new("TextLabel")
-	Hub.Name = "Hub"
-	Hub.Parent = Main
-	Hub.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Hub.BackgroundTransparency = 1.000
-	Hub.Position = UDim2.new(0, 94, 0, 0)
-	Hub.Size = UDim2.new(0, 81, 0, 27)
-	Hub.Font = Enum.Font.GothamSemibold
-	Hub.Text = ""
-	Hub.TextColor3 = Color3.fromRGB(255, 0, 0)
-	Hub.TextSize = 17.000
-	Hub.TextXAlignment = Enum.TextXAlignment.Left
+    -- Propriedades da interface
+    ScreenGui.Name = "NonoHub"
+    ScreenGui.Parent = game.CoreGui
 
-	local Tab = Instance.new("Frame")
-	Tab.Name = "Tab"
-	Tab.Parent = Main
-	Tab.BackgroundColor3 = Color3.fromRGB(10, 9, 9)
-	Tab.BackgroundTransparency = 0.4
-	Tab.Position = UDim2.new(0, 48, 0, 30)
-	Tab.Size = UDim2.new(0, 75, 0, 365)
-	
-	local postog123 = Instance.new("UIStroke")
+    MainFrame.Name = "MainFrame"
+    MainFrame.Parent = ScreenGui
+    MainFrame.BackgroundColor3 = Color3.new(0, 0, 0) -- Fundo preto
+    MainFrame.Size = UDim2.new(0, 400, 0, 300)
+    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+    MainFrame.Visible = false
 
-postog123.Name = "UIStroke"
-postog123.Parent = Tab
-postog123.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-postog123.Color = Color3.fromRGB(35,21,233)
-postog123.LineJoinMode = Enum.LineJoinMode.Round
-postog123.Thickness = 1
-postog123.Transparency = 0.4
-postog123.Enabled = true
-postog123.Archivable = true
+    OpenCloseButton.Name = "OpenCloseButton"
+    OpenCloseButton.Parent = ScreenGui
+    OpenCloseButton.Text = "Abrir/Fechar"
+    OpenCloseButton.Size = UDim2.new(0, 100, 0, 50)
+    OpenCloseButton.Position = UDim2.new(0, 10, 0, 10)
+
+    MainTab.Name = "MainTab"
+    MainTab.Parent = MainFrame
+    MainTab.BackgroundColor3 = Color3.new(0.8, 0.8, 0.8)
+    MainTab.Size = UDim2.new(1, 0, 1, 0)
+
+    MainButton.Name = "MainButton"
+    MainButton.Parent = MainTab
+    MainButton.Text = "Main"
+    MainButton.Size = UDim2.new(0, 100, 0, 50)
+    MainButton.Position = UDim2.new(0, 10, 0, 10)
+
+    AutoFastAttackButton.Name = "AutoFastAttackButton"
+    AutoFastAttackButton.Parent = MainTab
+    AutoFastAttackButton.Text = "Auto Fast Attack"
+    AutoFastAttackButton.Size = UDim2.new(0, 150, 0, 50)
+    AutoFastAttackButton.Position = UDim2.new(0, 10, 0, 70)
+
+    AutoCDKButton.Name = "AutoCDKButton"
+    AutoCDKButton.Parent = MainTab
+    AutoCDKButton.Text = "Auto CDK"
+    AutoCDKButton.Size = UDim2.new(0, 150, 0, 50)
+    AutoCDKButton.Position = UDim2.new(0, 10, 0, 130)
+
+    -- Função para abrir/fechar a interface
+    OpenCloseButton.MouseButton1Click:Connect(function()
+        MainFrame.Visible = not MainFrame.Visible
+    end)
+
+    -- Função para auto fast attack
+    local autoFastAttack = false
+    AutoFastAttackButton.MouseButton1Click:Connect(function()
+        autoFastAttack = not autoFastAttack
+        AutoFastAttackButton.Text = autoFastAttack and "Desativar Auto Fast Attack" or "Ativar Auto Fast Attack"
+        if autoFastAttack then
+            while autoFastAttack do
+                wait(0.1)
+                game:GetService("VirtualUser"):Button1Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+                game:GetService("VirtualUser"):Button1Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+            end
+        end
+    end)
+
+    -- Função para auto CDK
+    local autoCDK = false
+    AutoCDKButton.MouseButton1Click:Connect(function()
+        autoCDK = not autoCDK
+        AutoCDKButton.Text = autoCDK and "Desativar Auto CDK" or "Ativar Auto CDK"
+        if autoCDK then
+            while autoCDK do
+                wait(0.1)
+                local function AutoCDK()
+  local Cursed, DoorProgress = WaitPart(Map, "Turtle", "Cursed")
+  
+  local function MasterySwords()
+    local TushitaM, YamaM = ItemMastery("Tushita"), ItemMastery("Yama")
+    
+    if TushitaM and TushitaM < 350 then
+      if not VerifyTool("Tushita") then
+        FireRemote("LoadItem", "Tushita")
+      end
+    elseif YamaM and YamaM < 350 then
+      if not VerifyTool("Yama") then
+        FireRemote("LoadItem", "Yama")
+      end
+    else
+      return false
+    end;EquipToolTip("Sword")
+    
+    local Enemie = GetEnemies({"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"})
+    if Enemie then
+      PlayerTP(Enemie.HumanoidRootPart.CFrame + getgenv().FarmPos)
+      pcall(function()ActiveHaki()BringNPC(Enemie, true)end)
+    else
+      PlayerTP(CFrame.new(-9513, 164, 5786))
+    end
+    return true
+  end
+  
+  local function IndentifyQuest()
+    if VerifyItem("Cursed Dual Katana") then return {"Finished"} end -- Virefica se o jogador possui a CDK
+    if MasterySwords() then return {"MasterySwords"} end -- Verifica a maestria da Yama e a Tushita
+    
+    local Door = Cursed:FindFirstChild("Breakable")
+    if Door and Door.CanCollide then
+      local Prog = FireRemote("CDKQuest", "OpenDoor")
+      if type(Prog) == "string" and Prog == "opened" then
+        return {"OpenDoor"}
+      else
+        Door.CanCollide = false
+      end
+    end -- Verifica se a porta está aberta
+    
+    local Count = GetMaterial("Alucard Fragment") -- Pega a quantidade de material atual
+    
+    if Count == 6 then -- Verifica se é a ultima missão
+      return {"FinalQuest"}
+    elseif Count == 0 then
+      FireRemote("CDKQuest", "Progress", "Evil")FireRemote("CDKQuest", "StartTrial", "Evil")
+      return {"Yama", 1} -- Retorna a primeira missão
+    elseif Map:FindFirstChild("HellDimension") then
+      return {"Yama", 3} -- Retorna a dimensão da Yama
+    elseif Map:FindFirstChild("HeavenlyDimension") then
+      return {"Tushita", 3} -- Retorna a dimensão da Tushita
+    elseif Player:FindFirstChild("QuestHaze") then
+      return {"Yama", 2} -- Retorna a névoa da miseria
+    end
+    
+    local Progress = FireRemote("CDKQuest", "Progress")
+    local Good = Progress.Good
+    local Evil = Progress.Evil
+    
+    if Evil and Evil >= 0 and Evil < 3 then
+      FireRemote("CDKQuest", "Progress", "Evil")FireRemote("CDKQuest", "StartTrial", "Evil")
+      if Evil == 0 then
+        return {"Yama", 1}
+      elseif Evil == 1 then
+        return {"Yama", 2}
+      elseif Evil == 2 then
+        return {"Yama", 3}
+      end
+    elseif Good and Good >= 0 and Good < 3 then
+      FireRemote("CDKQuest", "Progress", "Good")FireRemote("CDKQuest", "StartTrial", "Good")
+      if Good == 0 then
+        return {"Tushita", 1}
+      elseif Good == 1 then
+        return {"Tushita", 2}
+      elseif Good == 2 then
+        return {"Tushita", 3}
+      end
+    end
+  end
+  
+  local function KillHazeEnemies()
+    local QuestHaze = Player:FindFirstChild("QuestHaze")
+    if QuestHaze then
+      local Nearest, Enemie = math.huge
+      for _,v in pairs(QuestHaze:GetChildren()) do
+        if v.Value > 0 then
+          local plrPP = Player.Character and Player.Character.PrimaryPart
+          local EnemiePos = v:GetAttribute("Position")
+          if v.Name == "Dragon Crew Warrior" then EnemiePos = Vector3.new(6431, 51, -1043)end
+          if plrPP and EnemiePos and (EnemiePos - plrPP.Position).Magnitude <= Nearest then
+            Nearest, Enemie = (EnemiePos - plrPP.Position).Magnitude, ({Name = v.Name, Position = EnemiePos})
+          end
+        end
+      end
+      
+      if Enemie then
+        local Enemies = GetEnemies({Enemie.Name})
+        if Enemies and Enemies:FindFirstChild("HumanoidRootPart") then
+          PlayerTP(Enemies.HumanoidRootPart.CFrame + getgenv().FarmPos)
+          pcall(function()ActiveHaki()EquipTool()BringNPC(Enemies)end)
+        else
+          if Enemie.Position then
+            PlayerTP(CFrame.new(Enemie.Position))
+          end
+        end;getgenv().CursedDualKatana = true
+      else
+        getgenv().CursedDualKatana = false
+      end
+    end
+  end
+  
+  local function GetTorch(Dimension)
+    if Dimension then
+      local Torch1 = Dimension:FindFirstChild("Torch1")
+      local Torch2 = Dimension:FindFirstChild("Torch2")
+      local Torch3 = Dimension:FindFirstChild("Torch3")
+      
+      if Torch1 and Torch1:FindFirstChild("ProximityPrompt") then
+        if Torch1.ProximityPrompt.Enabled then
+          return Torch1
+        end
+      end
+      if Torch2 and Torch2:FindFirstChild("ProximityPrompt") then
+        if Torch2.ProximityPrompt.Enabled then
+          return Torch2
+        end
+      end
+      if Torch3 and Torch3:FindFirstChild("ProximityPrompt") then
+        if Torch3.ProximityPrompt.Enabled then
+          return Torch3
+        end
+      end
+      return Dimension:FindFirstChild("Exit")
+    end
+  end
+  
+  local function InvokeSoulReaper()
+    local HellDimension = Map:FindFirstChild("HellDimension")
+    if HellDimension then
+      local plrPP = Player.Character and Player.Character.PrimaryPart
+      if plrPP and (plrPP.Position - HellDimension.WorldPivot.p).Magnitude < 2500 then
+        local Enemies = GetEnemies({"Hell's Messenger", "Cursed Skeleton"}, 2500)
+        local Torch = GetTorch(HellDimension)
+        
+        if Enemies then
+          PlayerTP(Enemies.HumanoidRootPart.CFrame + getgenv().FarmPos)
+          pcall(function()ActiveHaki()EquipTool()BringNPC(Enemies, true)end)
+        elseif Torch then
+          PlayerTP(Torch.CFrame)
+          if (plrPP.Position - Torch.Position).Magnitude < 10 then
+            if Torch:FindFirstChild("ProximityPrompt") and fireproximityprompt then
+              fireproximityprompt(Torch.ProximityPrompt)task.wait(0.5)
+            end
+          end
+        end;getgenv().CursedDualKatana = true
+      else
+        getgenv().CursedDualKatana = false
+      end
+    else
+      local SoulReaper = GetEnemies({"Soul Reaper"})
+      
+      if SoulReaper and SoulReaper:FindFirstChild("HumanoidRootPart") then
+        PlayerTP(SoulReaper.HumanoidRootPart.CFrame * CFrame.new(0, 2, 0))DisableTools()
+      elseif VerifyTool("Hallow Essence") then
+        EquipToolName("Hallow Essence")
+        pcall(function()PlayerTP(Map["Haunted Castle"].Summoner.Detection.CFrame)end)
+      else
+        if GetMaterial("Bones") >= 50 then
+          FireRemote("Bones", "Buy", 1, 1)
+        end
+        local Enemie = GetEnemies({"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"})
+        if Enemie then
+          PlayerTP(Enemie.HumanoidRootPart.CFrame + getgenv().FarmPos)
+          pcall(function()ActiveHaki()EquipTool()BringNPC(Enemie, true)end)
+        else
+          PlayerTP(CFrame.new(-9513, 164, 5786))
+        end
+      end;getgenv().CursedDualKatana = true
+    end
+  end
+  
+  local function DieGhost()
+    if not VerifyTool("Yama") then
+      FireRemote("LoadItem", "Yama")
+    else
+      local NPC = GetEnemies({"Forest Pirate"})EquipToolName("Yama")
+      
+      if NPC and NPC:FindFirstChild("HumanoidRootPart") then
+        PlayerTP(NPC.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2))
+      else
+        PlayerTP(CFrame.new(-13350, 332, -7645))
+      end;getgenv().CursedDualKatana = true
+    end
+  end
+  
+  local function GetPirateRaidNPC()
+    for _,npc in pairs(Enemies:GetChildren()) do
+      if npc.Name ~= "rip_indra True Form" and IsAlive(npc) then
+        if npc.PrimaryPart and (npc.PrimaryPart.Position - Vector3.new(-5556, 314, -2988)).Magnitude < 700 then
+          return npc
+        end
+      end
+    end
+  end
+  
+  local function PirateRaid()
+    if VerifyRaidPirate(true) then
+      local Enemie = GetPirateRaidNPC()
+      
+      if Enemie and Enemie:FindFirstChild("HumanoidRootPart") then
+        PlayerTP(Enemie.HumanoidRootPart.CFrame + getgenv().FarmPos)
+        pcall(function()ActiveHaki()EquipTool()BringNPC(Enemie, true)end)
+      else
+        PlayerTP(CFrame.new(-5556, 314, -2988))
+      end;getgenv().CursedDualKatana = true
+    else
+      getgenv().CursedDualKatana = false
+    end
+  end
+  
+  local function BigMoon()
+    local HeavenlyDimension = Map:FindFirstChild("HeavenlyDimension")
+    if HeavenlyDimension then
+      local plrPP = Player.Character and Player.Character.PrimaryPart
+      if plrPP and (plrPP.Position - HeavenlyDimension.WorldPivot.p).Magnitude < 2500 then
+        local Enemies = GetEnemies({"Heaven's Guardian", "Cursed Skeleton"}, 2500)
+        local Torch = GetTorch(HeavenlyDimension)
+        
+        if Enemies then
+          PlayerTP(Enemies.HumanoidRootPart.CFrame + getgenv().FarmPos)
+          pcall(function()ActiveHaki()EquipTool()BringNPC(Enemies, true)end)
+        elseif Torch then
+          PlayerTP(Torch.CFrame)
+          if (plrPP.Position - Torch.Position).Magnitude < 10 then
+            if Torch:FindFirstChild("ProximityPrompt") and fireproximityprompt then
+              fireproximityprompt(Torch.ProximityPrompt)task.wait(0.5)
+            end
+          end
+        end;getgenv().CursedDualKatana = true
+      else
+        getgenv().CursedDualKatana = false
+      end
+    else
+      local Boss = GetEnemies({"Cake Queen"})
+      
+      if Boss and Boss:FindFirstChild("HumanoidRootPart") then
+        PlayerTP(Boss.HumanoidRootPart.CFrame + getgenv().FarmPos)
+        pcall(function()ActiveHaki()EquipTool()end)
+      else
+        PlayerTP(CFrame.new(-710, 382, -11150))
+      end;getgenv().CursedDualKatana = true
+    end
+  end
+  
+  local Boat1, Boat2, Boat3
+  local function TalkBoatsDealer()
+    local plrPP = Player.Character and Player.Character.PrimaryPart
+    local BoatDealer = NPCS:FindFirstChild("Luxury Boat Dealer")
+    
+    if plrPP then
+      if not Boat1 then
+        PlayerTP(CFrame.new(-9550, 21, 4638))getgenv().CursedDualKatana = true
+        if BoatDealer and (plrPP.Position - Vector3.new(-9550, 21, 4638)).Magnitude < 5 then
+          FireRemote("CDKQuest", "BoatQuest", BoatDealer)FireRemote("CDKQuest", "BoatQuest", BoatDealer, "Check")task.wait(1)Boat1 = true
+        end
+      elseif not Boat2 then
+        PlayerTP(CFrame.new(-9531, 7, -8376))getgenv().CursedDualKatana = true
+        if BoatDealer and (plrPP.Position - Vector3.new(-9531, 7, -8376)).Magnitude < 5 then
+          FireRemote("CDKQuest", "BoatQuest", BoatDealer)FireRemote("CDKQuest", "BoatQuest", BoatDealer, "Check")task.wait(1)Boat2 = true
+        end
+      elseif not Boat3 then
+        PlayerTP(CFrame.new(-4602, 16, -2880))getgenv().CursedDualKatana = true
+        if BoatDealer and (plrPP.Position - Vector3.new(-4602, 16, -2880)).Magnitude < 5 then
+          FireRemote("CDKQuest", "BoatQuest", BoatDealer)FireRemote("CDKQuest", "BoatQuest", BoatDealer, "Check")task.wait(1)Boat3 = true
+        end
+      else
+        getgenv().CursedDualKatana = false
+      end
+    end
+  end
+  
+  task.spawn(function()
+    while getgenv().AutoCDK do task.wait()
+      local Quest = IndentifyQuest()
+      if Quest then
+        getgenv().CurrentQuest = Quest
+      end
+    end
+  end)
+  
+  while getgenv().AutoCDK do task.wait()
+    if MyLevel.Value >= 2200 then
+      local Quest = CurrentQuest
+      if Quest then
+        if Quest[1] == "Finished" then
+          getgenv().CursedDualKatana = false
+        elseif Quest[1] == "MasterySwords" then
+          getgenv().CursedDualKatana = true
+        elseif Quest[1] == "OpenDoor" then
+          local plrPP = Player.Character and Player.Character.PrimaryPart
+          if plrPP and (plrPP.Position - Vector3.new(-12131, 578, -6707)).Magnitude < 5 then
+            FireRemote("CDKQuest", "OpenDoor")FireRemote("CDKQuest", "OpenDoor", true)
+          else
+            PlayerTP(CFrame.new(-12131, 578, -6707))getgenv().CursedDualKatana = true
+          end
+        elseif Quest[1] == "FinalQuest" then
+          if not VerifyTool("Tushita") and not VerifyTool("Yama") then
+            FireRemote("LoadItem", "Tushita")
+          else
+            if VerifyNPC("Cursed Skeleton Boss") then
+              local Enemie = GetEnemies({"Cursed Skeleton Boss"})
+              if Enemie and Enemie:FindFirstChild("HumanoidRootPart") then
+                PlayerTP(Enemie.HumanoidRootPart.CFrame + getgenv().FarmPos)
+                pcall(function()ActiveHaki()end)
+              end;EquipToolTip("Sword")
+            else
+              local Pedestal1 = Cursed:FindFirstChild("Pedestal1")
+              local Pedestal2 = Cursed:FindFirstChild("Pedestal2")
+              local Pedestal3 = Cursed:FindFirstChild("Pedestal3")
+              
+              local Pedestal, Prompt
+              if Pedestal3 and Pedestal3:FindFirstChild("ProximityPrompt") then
+                if Pedestal3.ProximityPrompt.Enabled then
+                  Pedestal, Prompt = Pedestal3, Pedestal3.ProximityPrompt
+                end
+              end
+              if Pedestal2 and Pedestal2:FindFirstChild("ProximityPrompt") then
+                if Pedestal2.ProximityPrompt.Enabled then
+                  Pedestal, Prompt = Pedestal2, Pedestal2.ProximityPrompt
+                end
+              end
+              if Pedestal1 and Pedestal1:FindFirstChild("ProximityPrompt") then
+                if Pedestal1.ProximityPrompt.Enabled then
+                  Pedestal, Prompt = Pedestal1, Pedestal1.ProximityPrompt
+                end
+              end
+              
+              if DialogVisible() then
+                VirtualUser:ClickButton1(Vector2.new(1e4, 1e4))
+              else
+                if Pedestal then
+                  local plrPP = Player.Character and Player.Character.PrimaryPart
+                  if plrPP and (plrPP.Position - Pedestal.Position).Magnitude < 10 then
+                    if Prompt and fireproximityprompt then
+                      fireproximityprompt(Prompt)task.wait(0.5)
+                    end
+                  else
+                    PlayerTP(Pedestal.CFrame)
+                  end
+                else
+                  PlayerTP(CFrame.new(-12344, 603, -6551))
+                end
+              end
+            end
+          end;getgenv().CursedDualKatana = true
+        elseif Quest[1] == "Tushita" then
+          getgenv().ClickRequest = true
+          if Quest[2] == 1 then
+            TalkBoatsDealer()
+          elseif Quest[2] == 2 then
+            PirateRaid()
+          else BigMoon() end
+        elseif Quest[1] == "Yama" then
+          if Quest[2] == 1 then
+            DieGhost()getgenv().ClickRequest = false
+          elseif Quest[2] == 2 then
+            KillHazeEnemies()getgenv().ClickRequest = true
+          else InvokeSoulReaper() end
+        else
+          getgenv().CursedDualKatana = false
+        end
+      end
+    else
+      getgenv().CursedDualKatana = false
+    end
+  end
+  
+  getgenv().ClickRequest = true
+  getgenv().CursedDualKatana = false
+end
+            end
+        end
+    end)
+end
+
+
+wait(30)
+createInterface()
